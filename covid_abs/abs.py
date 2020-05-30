@@ -2,7 +2,7 @@
 Main code for Agent Based Simulation
 """
 
-from covid_abs.agents import Status, InfectionSeverity, Agent
+from covid_abs.agents import Status, InfectionSeverity, Agent, HealthType   # modify
 from covid_abs.common import *
 
 
@@ -46,6 +46,7 @@ class Simulation(object):
         self.triggers_population = kwargs.get("triggers_population", [])
         "A dictionary with conditional changes in the Agent attributes"
 
+        self.health_status = kwargs.get("health_status", 'h')      # modify
         self.total_wealth = kwargs.get("total_wealth", 10 ** 4)
 
     def _xclip(self, x):
@@ -111,7 +112,9 @@ class Simulation(object):
 
         age = int(np.random.beta(2, 5, 1) * 100)
         social_stratum = int(np.random.rand(1) * 100 // 20)
-        self.population.append(Agent(x=x, y=y, age=age, status=status, social_stratum=social_stratum))
+        s = ['h','r']
+        health = random.choice(s)   # modify
+        self.population.append(Agent(x=x, y=y, age=age, status=status, health=health, social_stratum=social_stratum))
 
     def initialize(self):
         """
@@ -138,7 +141,7 @@ class Simulation(object):
             for agent in filter(lambda x: x.social_stratum == quintile and x.age >= 18, self.population):
                 agent.wealth = ag_share
 
-    def contact(self, agent1, agent2):
+    def contact(self, agent1, agent2):  # increase agent number
         """
         Performs the actions needed when two agents get in touch.
 
@@ -149,9 +152,17 @@ class Simulation(object):
         if agent1.status == Status.Susceptible and agent2.status == Status.Infected:
             contagion_test = np.random.random()
             agent1.infection_status = InfectionSeverity.Exposed
-            if contagion_test <= self.contagion_rate:
-                agent1.status = Status.Infected
-                agent1.infection_status = InfectionSeverity.Asymptomatic
+            if agent1.health == 'h':    # modify
+                if contagion_test <= self.contagion_rate:
+                    agent1.status = Status.Infected
+                    agent1.infection_status = InfectionSeverity.Asymptomatic
+            else:
+                if contagion_test <= (self.contagion_rate + 1):   # if health status = respir_disease, the contagion rate increase
+                    agent1.status = Status.Infected
+                    agent1.infection_status = InfectionSeverity.Asymptomatic
+
+            
+            
 
     def move(self, agent, triggers=[]):
         """
