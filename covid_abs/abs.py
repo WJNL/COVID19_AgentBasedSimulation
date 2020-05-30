@@ -113,7 +113,7 @@ class Simulation(object):
         age = int(np.random.beta(2, 5, 1) * 100)
         social_stratum = int(np.random.rand(1) * 100 // 20)
         s = ['h','r']
-        health = random.choice(s)   # modify
+        health = np.random.choice(s)   # modify
         self.population.append(Agent(x=x, y=y, age=age, status=status, health=health, social_stratum=social_stratum))
 
     def initialize(self):
