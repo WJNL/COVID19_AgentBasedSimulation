@@ -219,6 +219,46 @@ class Simulation(object):
         result_ecom = np.random.rand(1)
         agent.wealth += dist * result_ecom * self.minimum_expense * basic_income[agent.social_stratum]
 
+    def travel(self, agent, triggers=[]):
+        """
+        Performs the actions related with the movement of the agents in the shared environment
+
+        :param agent: an instance of agents.Agent
+        :param triggers: the list of population triggers related to the movement
+        """
+
+        if agent.status == Status.Death or (agent.status == Status.Infected
+                                            and (agent.infected_status == InfectionSeverity.Hospitalization
+                                                 or agent.infected_status == InfectionSeverity.Severe)):
+            return
+
+        for trigger in triggers:
+            if trigger['condition'](agent):
+                agent.x, agent.y = trigger['action'](agent)
+                return
+        agent.amplitudes = {
+            Status.Susceptible : 15, 
+            Status.Recovered_Immune : 15, 
+            Status.Infected : 10}
+
+        ix = int(np.random.randn(1) * self.amplitudes[agent.status])
+        iy = int(np.random.randn(1) * self.amplitudes[agent.status])
+
+        if (agent.x + ix) <= 0 or (agent.x + ix) >= self.length:
+            agent.x -= ix
+        else:
+            agent.x += ix
+
+        if (agent.y + iy) <= 0 or (agent.y + iy) >= self.height:
+            agent.y -= iy
+        else:
+            agent.y += iy
+
+        dist = np.sqrt(ix ** 2 + iy ** 2)
+        result_ecom = np.random.rand(1)
+        agent.wealth += dist * result_ecom * self.minimum_expense * basic_income[agent.social_stratum]
+    
+
     def update(self, agent):
         """
         Update the status of the agent
