@@ -161,23 +161,23 @@ class Simulation(object):
             contagion_test = np.random.random()
             agent1.infection_status = InfectionSeverity.Exposed
             if agent1.health == 'h':    # modify
-                if contagion_test <= self.contagion_rate:
+                if contagion_test <= (self.contagion_rate * 0.9):
                     agent1.status = Status.Infected
                     agent1.infection_status = InfectionSeverity.Asymptomatic
             elif  agent1.health == 'r' AND agent1.age <= 40:
-                if contagion_test <= (self.contagion_rate * 1.1):
+                if contagion_test <= (self.contagion_rate * 1):
                     agent1.status = Status.Infected
                     agent1.infection_status = InfectionSeverity.Asymptomatic
             elif  agent1.health == 'r' AND agent1.age > 40:
-                if contagion_test <= (self.contagion_rate * 1.3):
+                if contagion_test <= (self.contagion_rate * 1.2):
                     agent1.status = Status.Infected
                     agent1.infection_status = InfectionSeverity.Asymptomatic
             elif  agent1.health == 'd' AND agent1.age <= 40:
-                if contagion_test <= (self.contagion_rate * 1.1):
+                if contagion_test <= (self.contagion_rate * 1):
                     agent1.status = Status.Infected
                     agent1.infection_status = InfectionSeverity.Asymptomatic
-            else:
-                if contagion_test <= (self.contagion_rate * 1.2):   # if health status = respir_disease, the contagion rate increase
+            elif  agent1.health == 'd' AND agent1.age > 40:
+                if contagion_test <= (self.contagion_rate * 1.1):   # if health status = respir_disease, the contagion rate increase
                     agent1.status = Status.Infected
                     agent1.infection_status = InfectionSeverity.Asymptomatic
 
