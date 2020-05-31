@@ -116,7 +116,7 @@ class Simulation(object):
         if age <= 40:
             s = ['h', 'h', 'h', 'h', 'h', 'h', 'r', 'd']
             health = np.random.choice(s)
-        elif age >40 AND age <= 60:
+        elif age >40 and age <= 60:
             s = ['h', 'h', 'h', 'h', 'r', 'd']
             health = np.random.choice(s)
         else:
@@ -164,19 +164,19 @@ class Simulation(object):
                 if contagion_test <= (self.contagion_rate * 0.9):
                     agent1.status = Status.Infected
                     agent1.infection_status = InfectionSeverity.Asymptomatic
-            elif  agent1.health == 'r' AND agent1.age <= 40:
+            elif  agent1.health == 'r' and agent1.age <= 40:
                 if contagion_test <= (self.contagion_rate * 1):
                     agent1.status = Status.Infected
                     agent1.infection_status = InfectionSeverity.Asymptomatic
-            elif  agent1.health == 'r' AND agent1.age > 40:
+            elif  agent1.health == 'r' and agent1.age > 40:
                 if contagion_test <= (self.contagion_rate * 1.2):
                     agent1.status = Status.Infected
                     agent1.infection_status = InfectionSeverity.Asymptomatic
-            elif  agent1.health == 'd' AND agent1.age <= 40:
+            elif  agent1.health == 'd' and agent1.age <= 40:
                 if contagion_test <= (self.contagion_rate * 1):
                     agent1.status = Status.Infected
                     agent1.infection_status = InfectionSeverity.Asymptomatic
-            elif  agent1.health == 'd' AND agent1.age > 40:
+            elif  agent1.health == 'd' and agent1.age > 40:
                 if contagion_test <= (self.contagion_rate * 1.1):   # if health status = respir_disease, the contagion rate increase
                     agent1.status = Status.Infected
                     agent1.infection_status = InfectionSeverity.Asymptomatic
