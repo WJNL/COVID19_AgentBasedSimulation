@@ -342,7 +342,7 @@ class Simulation(object):
                     [a.wealth for a in self.population if a.social_stratum == quintile
                      and a.age >= 18 and a.status != Status.Death])
             
-            for health_statu in     # modify
+            #for health_statu in     # modify
 
         return self.filter_stats(kind)
 
