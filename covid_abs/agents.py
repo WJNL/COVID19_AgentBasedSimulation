@@ -39,6 +39,7 @@ class AgentType(Enum):
 class HealthType(Enum):     # modify
     Health = 'h'
     Respiratory = 'r'
+    Diabetes = 'd'
 
 class Agent(object):
     """

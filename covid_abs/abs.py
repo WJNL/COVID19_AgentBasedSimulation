@@ -112,8 +112,16 @@ class Simulation(object):
 
         age = int(np.random.beta(2, 5, 1) * 100)
         social_stratum = int(np.random.rand(1) * 100 // 20)
-        s = ['h','r']
-        health = np.random.choice(s)   # modify
+        # modify
+        if age <= 40:
+            s = ['h', 'h', 'h', 'h', 'h', 'h', 'r', 'd']
+            health = np.random.choice(s)
+        elif age >40 AND age <= 60:
+            s = ['h', 'h', 'h', 'h', 'r', 'd']
+            health = np.random.choice(s)
+        else:
+            s = ['h', 'h', 'r', 'd']
+            health = np.random.choice(s)   
         self.population.append(Agent(x=x, y=y, age=age, status=status, health=health, social_stratum=social_stratum))
 
     def initialize(self):
@@ -141,7 +149,7 @@ class Simulation(object):
             for agent in filter(lambda x: x.social_stratum == quintile and x.age >= 18, self.population):
                 agent.wealth = ag_share
 
-    def contact(self, agent1, agent2):  # increase agent number
+    def contact(self, agent1, agent2): 
         """
         Performs the actions needed when two agents get in touch.
 
@@ -156,8 +164,20 @@ class Simulation(object):
                 if contagion_test <= self.contagion_rate:
                     agent1.status = Status.Infected
                     agent1.infection_status = InfectionSeverity.Asymptomatic
+            elif  agent1.health == 'r' AND agent1.age <= 40:
+                if contagion_test <= (self.contagion_rate * 1.1):
+                    agent1.status = Status.Infected
+                    agent1.infection_status = InfectionSeverity.Asymptomatic
+            elif  agent1.health == 'r' AND agent1.age > 40:
+                if contagion_test <= (self.contagion_rate * 1.3):
+                    agent1.status = Status.Infected
+                    agent1.infection_status = InfectionSeverity.Asymptomatic
+            elif  agent1.health == 'd' AND agent1.age <= 40:
+                if contagion_test <= (self.contagion_rate * 1.1):
+                    agent1.status = Status.Infected
+                    agent1.infection_status = InfectionSeverity.Asymptomatic
             else:
-                if contagion_test <= (self.contagion_rate + 1):   # if health status = respir_disease, the contagion rate increase
+                if contagion_test <= (self.contagion_rate * 1.2):   # if health status = respir_disease, the contagion rate increase
                     agent1.status = Status.Infected
                     agent1.infection_status = InfectionSeverity.Asymptomatic
 
@@ -321,6 +341,8 @@ class Simulation(object):
                 self.statistics['Q{}'.format(quintile + 1)] = np.sum(
                     [a.wealth for a in self.population if a.social_stratum == quintile
                      and a.age >= 18 and a.status != Status.Death])
+            
+            for health_statu in     # modify
 
         return self.filter_stats(kind)
 
